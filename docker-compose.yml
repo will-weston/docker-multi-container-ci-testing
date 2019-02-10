@@ -1,0 +1,52 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: ./dev/Dockerfile
+    ports:
+      - 8080:80
+  redis:
+    image: redis:alpine
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: hamper
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+  api:
+    depends_on:
+      - redis
+      - postgres
+    build:
+      context: ./multi-container-server
+      dockerfile: ./dev/Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./multi-container-server:/app
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PGUSER: postgres
+      PGHOST: postgres
+      PGDATABASE: postgres
+      PGPASSWORD: hamper
+      PGPORT: 5432
+  frontend:
+    depends_on:
+      - api
+    build:
+      context: ./multi-container-client
+      dockerfile: ./dev/Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./multi-container-client:/app
+  worker:
+    depends_on:
+      - redis
+    build:
+      context: ./multi-container-worker
+      dockerfile: ./dev/Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./multi-container-worker:/app
