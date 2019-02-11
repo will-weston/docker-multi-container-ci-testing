@@ -1,0 +1,40 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "willweston/multi-container-client",
+      "hostname": "frontend",
+      "essential": false,
+      "links": [ "api" ]
+    },
+    {
+      "name": "nginx",
+      "image": "willweston/multi-container-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "frontend",
+        "api"
+      ]
+    },
+    {
+      "name": "worker",
+      "image": "willweston/multi-container-worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "api",
+      "image": "willweston/multi-container-server",
+      "hostname": "api",
+      "essential": false
+    }
+  ]
+}
