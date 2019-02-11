@@ -6,7 +6,8 @@
       "image": "willweston/multi-container-client",
       "hostname": "frontend",
       "essential": false,
-      "links": [ "api" ]
+      "links": [ "api" ],
+      "memory": 256
     },
     {
       "name": "nginx",
@@ -22,19 +23,22 @@
       "links": [
         "frontend",
         "api"
-      ]
+      ],
+      "memory": 256
     },
     {
       "name": "worker",
       "image": "willweston/multi-container-worker",
       "hostname": "worker",
-      "essential": false
+      "essential": false,
+      "memory": 256
     },
     {
       "name": "api",
       "image": "willweston/multi-container-server",
       "hostname": "api",
-      "essential": false
+      "essential": false,
+      "memory": 256
     }
   ]
 }
