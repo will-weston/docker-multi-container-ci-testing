@@ -1,11 +1,14 @@
 sudo: required
 services:
   - docker
+
 before_install:
   - docker build -t $DOCKER_USER/multi-container-client:test -f ./multi-container-client/dev/Dockerfile ./multi-container-client
+
 script:
   - docker run $DOCKER_USER/multi-container-client:test npm run test -- --coverage
-after_sucess:
+
+after_success:
   - docker build -t $DOCKER_USER/multi-container-client:latest ./multi-container-client
   - docker build -t $DOCKER_USER/multi-container-server:latest ./multi-container-server
   - docker build -t $DOCKER_USER/multi-container-worker:latest ./multi-container-worker
@@ -15,6 +18,7 @@ after_sucess:
   - docker push $DOCKER_USER/multi-container-server:latest
   - docker push $DOCKER_USER/multi-container-worker:latest
   - docker push $DOCKER_USER/multi-container-nginx:latest
+
 env:
   global:
     - secure: TyldJ6UH1QoCtoUQVYimIP2UiQDCgnQBX3X8QMkPJHpStTFGFnje3T8hulBYRqyKkzTkpP+ESwTqakY9fSdnR0my4csW3np9DY6vKM4QCMFvLvYTU4pSalyu++yXx6hFa0cSb8B8JTvLgXeKO8SYrhccjZOq5PlT9VmbmWngz7u9mXlfG4VxylusvhlDroavMA4ulJ1SNiI1Phou6HTk7eLUpc6XkO3zv1jyas8db4Kq0kD/fQZ+RtW92u/bgA5+tj1d6Z7e9RI6q41cnqiyzRcMafRaBPxhIOwZsgvQmA6i96o5g9NIgyw27QjTyroSQCJIzM9R3arKsnfiGhBQ8jX2kSU/cUTEq2T2yHKFSll+lELrAVBYL9OV2SkKbD4xkWWxqOwDlMUohGrTZsNm3LhghpH+Bnv7LblugPo0+93AsonNsmGilGJVgO6LJZyRLC5CKpezTJpxeh6+9/otSzt3sLaz6r5pas88PMQumX5piNFHJcYkoWCqofi3GXYWEI50KYk0S7YKPz3XcdQxd86cQj1GfdqnK7dxUJ/1UGSuDKnKlqdWj7rfyMeypA6cYoZJdRqRjxFbDSHCktaIp03gbd7kyMqFFEKmeeW9LYU+IudC8XgArSDWN3Mm4ZIIo6dOZ7BjndVz8Lr+zTN8wjrIrM1Z3kD2pqOA5x6LhSk=
